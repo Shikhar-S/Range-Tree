@@ -122,7 +122,7 @@ void printArr(int *C,int N)
 	FILE *g = fopen("g.txt", "w+");
 	for (int i = 0; i < N; i++)
 	{
-		std::cout << C[i] << " ";
+		//std::cout << C[i] << " ";
 		fprintf(g, "%d ", C[i]);
 	}
 	//std::cout << std::endl;
@@ -131,6 +131,9 @@ void printArr(int *C,int N)
 
 int main()
 {
+	cudaEvent_t start, stop;
+	cudaEventCreate(&start);
+	cudaEventCreate(&stop);
 	int n;
 	FILE *f = fopen("f.txt", "r");
 	if (!f)
@@ -139,6 +142,7 @@ int main()
 		exit(-1);
 	}
 	fscanf(f,"%d", &n);
+	printf("%d\n",n);
 	//std::cin >> n;
 	int *C = (int*)malloc(sizeof(int)* 2 * n);
 	int *A = (int*)malloc(sizeof(int)*n);
@@ -167,7 +171,7 @@ int main()
 	int num_of_threads;
 	//std::cin >> num_of_threads;
 	fscanf(f, "%d", &num_of_threads);
-	
+	printf("%d\n", num_of_threads);
 	int *d_x,*d_y,*d_A,*d_B,*d_C;
 	HANDLE_ERROR(cudaMalloc((void**)&d_x,sizeof(int)*num_of_threads));
 	HANDLE_ERROR(cudaMalloc((void**)&d_y, sizeof(int)*num_of_threads));
@@ -177,8 +181,23 @@ int main()
 	HANDLE_ERROR(cudaDeviceSynchronize());
 	HANDLE_ERROR(cudaMemcpy(d_A, A, n*sizeof(int), cudaMemcpyHostToDevice));
 	HANDLE_ERROR(cudaMemcpy(d_B, B, n*sizeof(int), cudaMemcpyHostToDevice));
+	cudaEventRecord(start, 0);
 	MergePath << <1, num_of_threads >> >(d_A, d_B, d_C, d_x, d_y, n);
+	cudaEventRecord(stop, 0);
+	cudaEventSynchronize(stop);
+	float elapsedTime;
+	cudaEventElapsedTime(&elapsedTime, start, stop); // that's our time!
+	// Clean up:
+	cudaEventDestroy(start);
+	cudaEventDestroy(stop);
+	printf("%f\n", elapsedTime);
 	HANDLE_ERROR(cudaMemcpy(C, d_C, 2 * n*sizeof(int), cudaMemcpyDeviceToHost));
 	printArr(C,2*n);
+	HANDLE_ERROR(cudaFree(d_x));
+	HANDLE_ERROR(cudaFree(d_A));
+	HANDLE_ERROR(cudaFree(d_B));
+	HANDLE_ERROR(cudaFree(d_C));
+	HANDLE_ERROR(cudaFree(d_y));
+	
 	return 0;
 }
