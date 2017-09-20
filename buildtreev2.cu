@@ -274,9 +274,24 @@ void print_tree(Point* primary, Point* secondary)
 		
 	}
 }
-
+void print_tree_to_file(Point* primary, Point* secondary)
+{
+	FILE *g = fopen("g.txt","w+");
+	fprintf(g, "%d %d\n", N, logN);
+	for(int i = 0; i < N; i++)
+	{
+		fprintf(g, "%d %d\n", primary[i].x, primary[i].y);
+	}
+	for (int i = 0; i < N*logN; i++)
+	{
+		fprintf(g, "%d %d\n", secondary[i].x, secondary[i].y);
+	}
+}
 int main()
 {
+	cudaEvent_t start, stop;
+	HANDLE_ERROR(cudaEventCreate(&start));
+	HANDLE_ERROR(cudaEventCreate(&stop));
 	FILE *f = fopen("f.txt", "r");
 	if (!f)
 	{
@@ -312,10 +327,15 @@ int main()
 
 	HANDLE_ERROR(cudaMalloc((void**)&d_primary, N*sizeof(Point)));
 	HANDLE_ERROR(cudaMalloc((void**)&d_secondary, N*logN*sizeof(Point)));
-
+	cudaEventRecord(start, 0);
 	build_tree(d_primary, d_secondary, input, primary, secondary);
-	print_tree(primary, secondary);
-
+	cudaEventRecord(stop, 0);
+	cudaEventSynchronize(stop);
+	float elapsedTime;
+	cudaEventElapsedTime(&elapsedTime, start, stop); // that's our time!
+	std::cout << N << " " << elapsedTime << std::endl;
+	//print_tree(primary, secondary);
+	print_tree_to_file(primary,secondary);
 	HANDLE_ERROR(cudaFree(d_primary));
 	HANDLE_ERROR(cudaFree(d_secondary));
 	free(primary);
