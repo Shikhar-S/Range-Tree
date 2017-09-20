@@ -15,6 +15,7 @@
 #include <set>
 #include <numeric>
 #include <unordered_map>
+#include <ctime>
 #define MOD 1000000007
 using namespace std;
 typedef long long ll;
@@ -173,6 +174,7 @@ int main()
     sort(B.begin(),B.end());
    
     cin>>num_of_threads;
+    clock_t start=clock();
     for(int i=0;i<num_of_threads;i++)
     {
         // cout<<i<<endl;
@@ -183,8 +185,11 @@ int main()
     {
     	merge_using(i,C);
     }
+    clock_t end=clock();
+    float tm=(float)(end-start)/CLOCKS_PER_SEC;
+    printf("%.10f\n",tm);
     /*for(int i=0;i<num_of_threads;i++)
         cout<<x[i]<<" "<<y[i]<<endl;*/
-    printArr(C);
+    // printArr(C);
     return 0;
 }

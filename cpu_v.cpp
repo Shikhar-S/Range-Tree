@@ -100,7 +100,11 @@ void build_tree() //correct
     sort(points.begin(),points.end(),comp_x);
     copy_own(points.begin(),points.end(),Primary);
     copy_own(points.begin(),points.end(),Secondary);
+    clock_t s=clock();
     build_tree(2,0);
+    clock_t e=clock();
+    cout<<(((e-s)*(1000.0))/CLOCKS_PER_SEC)<<endl;
+    
 }
 ///////////////////////////////////////// To Check//////////////////////////////////////
 
@@ -405,9 +409,12 @@ int main()
         cin>>t.ff>>t.ss;
         points.pb(t);
     }
+    clock_t start=clock();
     build_tree();
+    clock_t end=clock();
+    cout<<(((end-start)*(1000.0))/CLOCKS_PER_SEC)<<endl;
     // print_tree();
-    int q;
+    /*int q;
     cin>>q;
     int Q=q;
     while(q--)
@@ -417,6 +424,6 @@ int main()
         Queries.pb(mp(x,y)); //assuming first point is less than second.
     }
     for(int i=0;i<Q;i++)
-        solve(i);
+        solve(i);*/
     return 0;
 }
