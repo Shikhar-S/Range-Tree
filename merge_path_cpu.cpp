@@ -187,6 +187,7 @@ int main()
     }
     clock_t end=clock();
     float tm=(float)(end-start)/CLOCKS_PER_SEC;
+    tm*=1000.0;
     printf("%.10f\n",tm);
     /*for(int i=0;i<num_of_threads;i++)
         cout<<x[i]<<" "<<y[i]<<endl;*/

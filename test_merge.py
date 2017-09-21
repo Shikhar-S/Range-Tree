@@ -1,5 +1,5 @@
 import random
-n=random.randint(10,10)
+n=random.randint(8,8)
 t=n
 n=2**n
 print n
