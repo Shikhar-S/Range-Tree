@@ -1,12 +1,12 @@
 import random
-n=input()
-n=2**n
-lim=1000
-print n
-for i in range(n):
-	x=random.randint(-lim,lim)
-	y=random.randint(-lim,lim)
-	print x, y
+for i in range(20):
+	n=2**i
+	lim=1000
+	print n
+	for i in range(n):
+		x=random.randint(-lim,lim)
+		y=random.randint(-lim,lim)
+		print x, y
 '''
 queries=random.randint(1,10)
 print queries
