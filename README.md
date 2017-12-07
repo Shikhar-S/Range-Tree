@@ -6,3 +6,4 @@ And Then merging the sorted arrays to form Secondary Trees using Merge Path Algo
 ![Merge Path vs CPU Merge](https://github.com/Shikhar-S/Range-Tree/blob/master/Images/temp.png)
 The graph here shows combined results.
 ![Final Result](https://github.com/Shikhar-S/Range-Tree/blob/master/Images/RangeTreeConstruction.jpeg)
+(in all the graphs above- X axis: log(# of points), Y axis:(Milliseconds) )
